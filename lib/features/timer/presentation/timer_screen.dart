@@ -183,6 +183,15 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            _stopTimer();
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back_ios_rounded,
+          ),
+        ),
         title: Text(_currentProject.clientName),
         elevation: 2,
       ),
@@ -366,16 +375,16 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                   fontSize: ResponsiveSizing.getHeadingFontSize(context),
                 ),
               ),
-              if (_currentProject.timeEntries.isNotEmpty)
-                TextButton.icon(
-                  onPressed: () async {
-                    await _exportSessions(context);
-                  },
-                  icon: const Icon(Icons.download, size: 16),
-                  label: screenSize == ScreenSize.small
-                      ? const SizedBox.shrink()
-                      : const Text('Export All'),
-                ),
+              // if (_currentProject.timeEntries.isNotEmpty)
+              //   TextButton.icon(
+              //     onPressed: () async {
+              //       await _exportSessions(context);
+              //     },
+              //     icon: const Icon(Icons.download, size: 16),
+              //     label: screenSize == ScreenSize.small
+              //         ? const SizedBox.shrink()
+              //         : const Text(''),
+              //   ),
             ],
           ),
         ),

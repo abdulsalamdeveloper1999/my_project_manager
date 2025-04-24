@@ -92,7 +92,7 @@ Future<void> configureWindowSize() async {
     // WindowOptions for desktop
     final windowOptions = WindowOptions(
       size: const Size(1280, 800), // Initial size
-      minimumSize: const Size(960, 640), // Minimum size
+      minimumSize: const Size(760, 640), // Minimum size
       center: true, // Center window on screen
       backgroundColor: Colors.transparent,
       skipTaskbar: false,
@@ -335,7 +335,7 @@ class _AppShellState extends State<AppShell> {
     // Make sure we have a valid context and Theme
     if (!mounted) return const SizedBox.shrink();
 
-    final theme = Theme.of(context);
+    Theme.of(context);
 
     return Scaffold(
       body: Row(

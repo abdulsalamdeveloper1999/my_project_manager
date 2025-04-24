@@ -1,4 +1,3 @@
-import 'dart:io';
 
 /// This script provides instructions for running the icon generation.
 /// Run this with:
