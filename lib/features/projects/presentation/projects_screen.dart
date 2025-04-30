@@ -202,12 +202,18 @@ class ProjectCard extends ConsumerWidget {
     for (final entry in project.timeEntries) {
       if (entry.endTime != null) {
         final duration = entry.endTime!.difference(entry.startTime);
-        totalHours += duration.inMinutes / 60;
+        totalHours += duration.inSeconds / 3600.0; // Convert seconds to hours
       }
     }
 
     // Calculate total earnings
     final totalEarnings = totalHours * project.hourlyRate;
+
+    // Debug print statements to trace values
+    debugPrint('Project: ${project.clientName}');
+    debugPrint('Total Hours: $totalHours');
+    debugPrint('Hourly Rate: ${project.hourlyRate}');
+    debugPrint('Total Earnings: $totalEarnings');
 
     return CustomCard(
       margin: const EdgeInsets.only(bottom: 16),
@@ -331,7 +337,23 @@ class ProjectCard extends ConsumerWidget {
     );
   }
 
-  // Edit project dialog
+  Widget _buildInfoItem(BuildContext context, IconData icon, String text) {
+    final theme = Theme.of(context);
+    return Row(
+      children: [
+        Icon(icon, color: theme.colorScheme.secondary, size: 18),
+        const SizedBox(width: 8),
+        Text(
+          text,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
+
+// Edit project dialog
   void _editProject(BuildContext context, WidgetRef ref, Project project) {
     final clientNameController =
         TextEditingController(text: project.clientName);
@@ -441,7 +463,7 @@ class ProjectCard extends ConsumerWidget {
     );
   }
 
-  // Delete project confirmation dialog
+// Delete project confirmation dialog
   void _deleteProject(BuildContext context, WidgetRef ref, Project project) {
     showDialog(
       context: context,
@@ -490,7 +512,7 @@ class ProjectCard extends ConsumerWidget {
     );
   }
 
-  // Export invoice
+// Export invoice
   void _exportInvoice(BuildContext context, Project project) {
     try {
       // Show a loading indicator
@@ -528,20 +550,20 @@ class ProjectCard extends ConsumerWidget {
     }
   }
 
-  Widget _buildInfoItem(BuildContext context, IconData icon, String text) {
-    return Row(
-      children: [
-        Icon(
-          icon,
-          size: 16,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        const SizedBox(width: 4),
-        Text(
-          text,
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
-      ],
-    );
-  }
+  // Widget _buildInfoItem(BuildContext context, IconData icon, String text) {
+  //   return Row(
+  //     children: [
+  //       Icon(
+  //         icon,
+  //         size: 16,
+  //         color: Theme.of(context).colorScheme.primary,
+  //       ),
+  //       const SizedBox(width: 4),
+  //       Text(
+  //         text,
+  //         style: Theme.of(context).textTheme.bodyMedium,
+  //       ),
+  //     ],
+  //   );
+  // }
 }

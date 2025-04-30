@@ -115,6 +115,22 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
     final activeTimer = ref.read(activeTimerProvider);
     if (activeTimer != null && activeTimer.endTime != null) {
       try {
+        // Debug print statements to trace values
+        debugPrint('Start Time: ${activeTimer.startTime}');
+        debugPrint('End Time: ${activeTimer.endTime}');
+
+        // Calculate the duration
+        final duration = activeTimer.endTime!.difference(activeTimer.startTime);
+        debugPrint('Duration: $duration');
+
+        // Calculate hours as a fraction
+        final hours = duration.inSeconds / 3600.0;
+        debugPrint('Hours: $hours');
+
+        final earnings = hours * _currentProject.hourlyRate;
+        debugPrint('Hourly Rate: ${_currentProject.hourlyRate}');
+        debugPrint('Earnings: $earnings');
+
         // Use the ProjectsNotifier to add the time entry instead of TimerRepository directly
         ref
             .read(projectsProvider.notifier)
@@ -185,8 +201,12 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            _stopTimer();
-            Navigator.pop(context);
+            if (_timer?.isActive ?? false) {
+              _stopTimer();
+              Navigator.pop(context);
+            } else {
+              Navigator.pop(context);
+            }
           },
           icon: Icon(
             Icons.arrow_back_ios_rounded,
@@ -407,8 +427,19 @@ class _TimerScreenState extends ConsumerState<TimerScreen> {
                     final duration = isComplete
                         ? entry.endTime!.difference(entry.startTime)
                         : const Duration(seconds: 0);
-                    final hours = duration.inMinutes / 60;
+
+                    // Calculate hours as a fraction
+                    final hours = duration.inSeconds / 3600.0;
                     final earnings = hours * _currentProject.hourlyRate;
+
+                    // Debug print statements to trace values
+                    debugPrint('Session History Entry $index');
+                    debugPrint('Start Time: ${entry.startTime}');
+                    debugPrint('End Time: ${entry.endTime}');
+                    debugPrint('Duration: $duration');
+                    debugPrint('Hours: $hours');
+                    debugPrint('Hourly Rate: ${_currentProject.hourlyRate}');
+                    debugPrint('Earnings: $earnings');
 
                     return CustomCard(
                       margin: EdgeInsets.only(

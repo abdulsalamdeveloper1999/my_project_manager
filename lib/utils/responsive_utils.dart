@@ -6,7 +6,7 @@ class ResponsiveSizing {
   static ScreenSize getScreenSize(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
 
-    if (width < 600) {
+    if (width < 396) {
       return ScreenSize.small;
     } else if (width < 1200) {
       return ScreenSize.medium;
@@ -79,7 +79,7 @@ class ResponsiveSizing {
       case ScreenSize.small:
         return 1;
       case ScreenSize.medium:
-        return 2;
+        return 3;
       case ScreenSize.large:
         return 3;
     }

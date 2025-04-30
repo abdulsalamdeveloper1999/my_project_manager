@@ -108,7 +108,7 @@ class DashboardScreen extends ConsumerWidget {
               context,
               Icons.timer_outlined,
               'Total Hours',
-              stats.totalHours.toStringAsFixed(1),
+              stats.totalHours.toStringAsFixed(2), // Show more decimal places
               theme.colorScheme.secondary,
             ),
             const SizedBox(height: 8),
@@ -124,44 +124,31 @@ class DashboardScreen extends ConsumerWidget {
 
       case ScreenSize.medium:
         // Two cards per row on medium screens
-        return Column(
+        return Row(
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: _buildStatCard(
-                    context,
-                    Icons.folder_outlined,
-                    'Active Projects',
-                    '${stats.activeProjects}',
-                    theme.colorScheme.primary,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: _buildStatCard(
-                    context,
-                    Icons.timer_outlined,
-                    'Total Hours',
-                    stats.totalHours.toStringAsFixed(1),
-                    theme.colorScheme.secondary,
-                  ),
-                ),
-              ],
+            Expanded(
+              child: _buildStatCard(
+                context,
+                Icons.folder_outlined,
+                'Active Projects',
+                '${stats.activeProjects}',
+                theme.colorScheme.primary,
+              ),
             ),
-            const SizedBox(height: 16),
-            _buildStatCard(
-              context,
-              Icons.attach_money_outlined,
-              'Total Earnings',
-              '\$${stats.totalEarnings.toStringAsFixed(2)}',
-              theme.colorScheme.tertiary,
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildStatCard(
+                context,
+                Icons.timer_outlined,
+                'Total Hours',
+                stats.totalHours.toStringAsFixed(2), // Show more decimal places
+                theme.colorScheme.secondary,
+              ),
             ),
           ],
         );
 
       case ScreenSize.large:
-      default:
         // Three cards in a row on large screens
         return Row(
           children: [
@@ -180,7 +167,7 @@ class DashboardScreen extends ConsumerWidget {
                 context,
                 Icons.timer_outlined,
                 'Total Hours',
-                stats.totalHours.toStringAsFixed(1),
+                stats.totalHours.toStringAsFixed(2), // Show more decimal places
                 theme.colorScheme.secondary,
               ),
             ),
@@ -274,8 +261,17 @@ class DashboardScreen extends ConsumerWidget {
         itemBuilder: (context, index) {
           final item = recentEntries[index];
           final duration = item.entry.endTime!.difference(item.entry.startTime);
-          final hours = duration.inMinutes / 60;
+          final hours = duration.inSeconds / 3600.0; // Convert seconds to hours
           final earnings = hours * item.project.hourlyRate;
+
+          // Debug print statements to trace values
+          debugPrint('Recent Activity Entry $index');
+          debugPrint('Start Time: ${item.entry.startTime}');
+          debugPrint('End Time: ${item.entry.endTime}');
+          debugPrint('Duration: $duration');
+          debugPrint('Hours: $hours');
+          debugPrint('Hourly Rate: ${item.project.hourlyRate}');
+          debugPrint('Earnings: $earnings');
 
           return ListTile(
             leading: CircleAvatar(
@@ -328,7 +324,7 @@ class DashboardScreen extends ConsumerWidget {
       for (final entry in project.timeEntries) {
         if (entry.endTime != null) {
           final duration = entry.endTime!.difference(entry.startTime);
-          final hours = duration.inMinutes / 60;
+          final hours = duration.inSeconds / 3600.0; // Convert seconds to hours
           totalEarnings += hours * project.hourlyRate;
         }
       }
@@ -549,7 +545,7 @@ class DashboardScreen extends ConsumerWidget {
       for (final entry in project.timeEntries) {
         if (entry.endTime != null) {
           final duration = entry.endTime!.difference(entry.startTime);
-          final hours = duration.inMinutes / 60;
+          final hours = duration.inSeconds / 3600.0; // Convert seconds to hours
           projectHours += hours;
 
           // Check if there's activity in the last 30 days
@@ -568,6 +564,10 @@ class DashboardScreen extends ConsumerWidget {
       totalHours += projectHours;
       totalEarnings += projectHours * project.hourlyRate;
     }
+
+    // Debug print statements to trace values
+    debugPrint('Total Hours: $totalHours');
+    debugPrint('Total Earnings: $totalEarnings');
 
     return DashboardStats(
       activeProjects: activeProjects,
